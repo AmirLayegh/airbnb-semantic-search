@@ -25,8 +25,8 @@ class DataSchema(sl.Schema):
     
 airbnb = DataSchema()
 
-category_space = sl.CategoricalSpace(
-    category=airbnb.room_type, categories=constants.TYPES
+category_space = sl.CategoricalSimilaritySpace(
+    category_input=airbnb.room_type, categories=constants.TYPES
 )
 
 description_space = sl.TextSimilaritySpace(
