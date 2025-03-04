@@ -17,6 +17,7 @@ airbnb_data_loader_parser: sl.DataFrameParser = sl.DataFrameParser(
 airbnb_data_loader_config: sl.DataLoaderConfig = sl.DataLoaderConfig(
     str(setting.DATA_PATH),
     sl.DataFormat.CSV,
+    pandas_read_kwargs={"lines": True, "chunksize": 100},
 )
 
 airbnb_loader_source: sl.DataLoaderSource = sl.DataLoaderSource(

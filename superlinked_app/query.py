@@ -1,5 +1,5 @@
 from superlinked import framework as sl
-from superlinked_app import constants, index
+from superlinked_app import index
 from superlinked_app.config import setting
 
 
@@ -43,16 +43,16 @@ base_query = (
             index.description_space: sl.Param("description_weight"),
             index.review_rating_maximizer_space: sl.Param("review_rating_maximizer_weight"),
             index.price_minimizer_space: sl.Param("price_minimizer_weight"),
-            index.amenities_space: sl.Param("amenities_weight"),
+            index.amenities_space: sl.Param("amenities_weight")
         },
     )
     .find(index.airbnb)
     .with_natural_query(sl.Param("natural_query"), openai_config)
     .filter(
-        index.airbnb.room_type == sl.Param("filter_by_type", options=constants.TYPES),
+        index.airbnb.room_type == sl.Param("filter_by_type", options=['Private room', 'Entire home/apt', 'Shared room', 'Hotel room']),
     )
-    .select_all()
-    .limit(sl.Param("limit"))
+    #.select_all()
+    .limit(5)
 )
 
 filter_query = (
@@ -67,7 +67,7 @@ filter_query = (
         sl.Param("amenities_similar_clause_weight"),
     )
     .filter(
-        index.airbnb.room_type == sl.Param("filter_by_type", options=constants.TYPES),
+        index.airbnb.room_type == sl.Param("filter_by_type", options=['Private room', 'Entire home/apt', 'Shared room', 'Hotel room']),
     )
     .filter(
         index.airbnb.review_scores_rating >= sl.Param("review_rating_bigger_than",

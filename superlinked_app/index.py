@@ -1,10 +1,11 @@
 from superlinked import framework as sl
 from superlinked_app import constants
+# from superlinked_app.constants import TYPES as typ
 from datetime import timedelta, datetime
 
 class DataSchema(sl.Schema):
     id: sl.IdField
-    date: sl.Timestamp
+    #date: sl.Timestamp
     name: sl.String
     description: sl.String
     # review_scores_communication: sl.Float
@@ -26,7 +27,7 @@ class DataSchema(sl.Schema):
 airbnb = DataSchema()
 
 category_space = sl.CategoricalSimilaritySpace(
-    category_input=airbnb.room_type, categories=constants.TYPES
+    category_input=airbnb.room_type, categories=['Private room', 'Entire home/apt', 'Shared room', 'Hotel room']
 )
 
 description_space = sl.TextSimilaritySpace(
