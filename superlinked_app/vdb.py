@@ -17,7 +17,7 @@ airbnb_data_loader_parser: sl.DataFrameParser = sl.DataFrameParser(
 airbnb_data_loader_config: sl.DataLoaderConfig = sl.DataLoaderConfig(
     str(setting.DATA_PATH),
     sl.DataFormat.CSV,
-    pandas_read_kwargs={"lines": True, "chunksize": 100},
+    pandas_read_kwargs={"chunksize": 100},
 )
 
 airbnb_loader_source: sl.DataLoaderSource = sl.DataLoaderSource(
@@ -29,8 +29,8 @@ airbnb_loader_source: sl.DataLoaderSource = sl.DataLoaderSource(
 if setting.USE_QDRANT_VECTOR_DB:
     logger.info("Using Qdrant vector database")
     vector_database = sl.QdrantVectorDatabase(
-        setting.QDRANT_CLUSTER_NAME,
-        setting.QDRANT_COLLECTION_NAME,
+        # setting.QDRANT_CLUSTER_NAME,
+        # setting.QDRANT_COLLECTION_NAME,
         setting.QDRANT_CLUSTER_URL.get_secret_value(),
         setting.QDRANT_API_KEY.get_secret_value(),
     )
@@ -39,15 +39,16 @@ else:
     logger.info("Using in-memory database")
     vector_database = sl.InMemoryVectorDatabase()
     
+
 executor = sl.RestExecutor(
     sources=[airbnb_source, airbnb_loader_source],
     indices=[index.airbnb_index],
-    vector_database=vector_database,
     queries=[
         sl.RestQuery(sl.RestDescriptor("filter_query"), query.filter_query),
         sl.RestQuery(sl.RestDescriptor("base_query"), query.base_query),
         sl.RestQuery(sl.RestDescriptor("semantic_search_query"), query.semantic_query),
-    ]
+    ],
+    vector_database=vector_database,
 )
 
 sl.SuperlinkedRegistry.register(executor)

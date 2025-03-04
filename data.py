@@ -13,8 +13,8 @@ logger.info("Loading environment variables from .env file: %s", ENV_FILE)
 
 class DataReader:
     def __init__(self) -> None:
-        self.path = os.getenv('DATA_PATH')
-        
+        #self.path = os.getenv('DATA_PATH')
+        self.path = "/Users/amlk/MLOps-training/listings.csv"
     def read(self):
         data = pd.read_csv(self.path)
         return data
@@ -26,16 +26,14 @@ class DataReader:
         data['review_scores_rating'].fillna(-1.0, inplace=True)
         data['price'].fillna(-1.0, inplace=True)
         return data
-    
-data_reader = DataReader()
-data = data_reader.read()
-data = data_reader.preprocess(data)
 
-airbnb_parser = sl.DataFrameParser(index.airbnb, mapping={index.airbnb.id: "id", index.airbnb.date: "last_scraped"})
-source: sl.InMemorySource = sl.InMemorySource(index.airbnb, airbnb_parser)
-executor = sl.InMemoryExecutor(sources=[source], indices=[index.airbnb_index])
-app = executor.run()
-source.put(data)
+if __name__ == "__main__":
+    data_reader = DataReader()
+    data = data_reader.read()
+    data = data_reader.preprocess(data)
+    
+    data.to_csv('listings.csv', index=False)
+
 
 
 

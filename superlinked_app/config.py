@@ -14,7 +14,7 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=str(ENV_FILE), env_file_encoding="utf-8")
     
     DATA_PATH: str = "/Users/amlk/MLOps-training/listings.csv"
-    USE_QDRANT_VECTOR_DB: bool = False
+    USE_QDRANT_VECTOR_DB: bool = True
     QDRANT_CLUSTER_NAME: str = 'airbnb'
     QDRANT_COLLECTION_NAME: str = 'airbnb_semantic_search'
     QDRANT_API_KEY: SecretStr
@@ -34,12 +34,13 @@ class Settings(BaseSettings):
             ]
             
             missing_settings = [
-                k for k, v in required_settings.items() if not v
-            ]
-            
-            if missing_settings:
-                raise ValueError(f"Missing required Qdrant settings: {missing_settings}")
-            
+            setting for setting in required_settings 
+            if not getattr(self, setting, None)
+        ]
+        
+        if missing_settings:
+            raise ValueError(f"Missing required Qdrant settings: {missing_settings}")
+        
         return self
     
     
