@@ -43,15 +43,16 @@ base_query = (
             index.description_space: sl.Param("description_weight"),
             index.review_rating_maximizer_space: sl.Param("review_rating_maximizer_weight"),
             index.price_minimizer_space: sl.Param("price_minimizer_weight"),
+            index.amenities_space: sl.Param("amenities_weight"),
         },
     )
     .find(index.airbnb)
-    .limit(sl.Param("limit"))
     .with_natural_query(sl.Param("natural_query"), openai_config)
     .filter(
         index.airbnb.room_type == sl.Param("filter_by_type", options=constants.TYPES),
     )
     .select_all()
+    .limit(sl.Param("limit"))
 )
 
 filter_query = (
@@ -59,6 +60,11 @@ filter_query = (
         index.description_space,
         text_similar_param,
         sl.Param("description_similar_clause_weight"),
+    )
+    .similar(
+        index.amenities_space,
+        amenities_param,
+        sl.Param("amenities_similar_clause_weight"),
     )
     .filter(
         index.airbnb.room_type == sl.Param("filter_by_type", options=constants.TYPES),
@@ -71,6 +77,7 @@ filter_query = (
         index.airbnb.price <= sl.Param("price_smaller_than",
                                        description="Used to find listings with a price smaller than the provided number.",)
     )
+    #.select_all()
 )
 
 semantic_query = (
@@ -95,5 +102,5 @@ semantic_query = (
         index.airbnb.price <= sl.Param("price_smaller_than",
                                        description="Used to find listings with a price smaller than the provided number.",)
     )
-    .select_all()
+    #.select_all()
 )
