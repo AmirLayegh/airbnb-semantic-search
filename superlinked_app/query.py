@@ -18,7 +18,7 @@ text_similar_param = sl.Param(
         "The text in the user's query that is used to search in the listings' descriptions."
         "Extract info that does not apply to other spaces or params."
     ),
-    options=constants.TYPES,
+    #options=constants.TYPES,
 )
 price_param = sl.Param(
     "query_price",
@@ -51,6 +51,7 @@ base_query = (
     .filter(
         index.airbnb.room_type == sl.Param("filter_by_type", options=constants.TYPES),
     )
+    .select_all()
 )
 
 filter_query = (
@@ -83,9 +84,9 @@ semantic_query = (
         amenities_param,
         sl.Param("amenities_similar_clause_weight"),
     )
-    .filter(
-        index.airbnb.room_type == sl.Param("filter_by_type", options=constants.TYPES),
-    )
+    # .filter(
+    #     index.airbnb.room_type == sl.Param("filter_by_type", options=constants.TYPES),
+    # )
     .filter(
         index.airbnb.review_scores_rating >= sl.Param("review_rating_bigger_than",
                                                       description="Used to find listings with a review rating bigger than the provided number.",)
@@ -94,4 +95,5 @@ semantic_query = (
         index.airbnb.price <= sl.Param("price_smaller_than",
                                        description="Used to find listings with a price smaller than the provided number.",)
     )
+    .select_all()
 )

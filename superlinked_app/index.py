@@ -38,10 +38,10 @@ review_rating_maximizer_space = sl.NumberSpace(
 price_minimizer_space = sl.NumberSpace(
     number=airbnb.price, min_value=-1.0, max_value=500000.0, mode=sl.Mode.MINIMUM
 )
-recency_space = sl.RecencySpace(
-    timestamp=airbnb.date,
-    period_time_list=[sl.PeriodTime(period=timedelta(days=365))]
-)
+# recency_space = sl.RecencySpace(
+#     timestamp=airbnb.date,
+#     period_time_list=[sl.PeriodTime(period=timedelta(days=365))]
+# )
 amenities_space = sl.TextSimilaritySpace(
     text=airbnb.amenities, model="Alibaba-NLP/gte-large-en-v1.5"
 )
@@ -52,8 +52,8 @@ airbnb_index = sl.Index(
         description_space,
         review_rating_maximizer_space,
         price_minimizer_space,
-        recency_space,
+        # recency_space,
         amenities_space,
     ],
-    fields=[airbnb.description, airbnb.review_scores_rating, airbnb.price, airbnb.date, airbnb.amenities],
+    fields=[airbnb.room_type, airbnb.description, airbnb.review_scores_rating, airbnb.price, airbnb.amenities],
 )
