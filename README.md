@@ -12,27 +12,43 @@ A cutting-edge **semantic search system** for Airbnb listings, leveraging **[Sup
 - **RESTful API Endpoints**:  Built with FastAPI for efficient and scalable backend operations.
 - **Interactive UI**: Uses [Streamlit](https://streamlit.io/) to provide an intuitive front-end interface for searching Airbnb listings.
 
-## 🏗️ Project Structure
+## 📁 Project Structure
 
 ```
-.
-├── data/                                          # Directory where dataset files can be found
-├── superlinked_app/                               # Main application source code
-├── tools/                                         # Utility scripts and helper tools
-├── .env.example                                   # Template for environment variables
-├── app.py                                         # Python file for in memory development.
-├── Makefile                                       # Running commands shortcuts
-├── pyproject.toml                                 # Python project dependencies and metadata
-└── uv.lock                                        # Lock file for uv package manager
+├── superlinked_app/
+│   ├── __init__.py          # Package initialization
+│   ├── config.py            # Configuration settings
+│   ├── constants.py         # Constants definition
+│   ├── index.py             # Data schema definition
+│   ├── query.py             # Query configurations
+│   └── vdb.py               # Vector database setup
+├── tools/
+│   ├── create_qdrant_database.py  # Database initialization tool
+│   ├── st_app.py                  # Enhanced Streamlit UI
+│   └── streamlit_app.py           # Basic Streamlit UI
+├── .env.example                   # Environment variables 
+├── app.py                   # Python file for in memory development when we trun Qdrant vdb off.
+├── Makefile                 # Automation for common development tasks
+├── pyproject.toml           # Project metadata and dependencies
+└── README.md                # Project documentation
 ```
 
 ## 🔧 Technologies
-
+![Airbnb semantic search](/sources/airbnb-semantic-search-ui.png)
 - **Superlinked Framework**: For semantic search capabilities
 - **Qdrant**: Vector database for efficient similarity search
 - **OpenAI API**: Natural language understanding
 - **Streamlit**: Interactive web interface
 - **uv**: Fast Python package installer and resolver
+
+<!-- **Recommendation**: While you can follow the installation guide directly, we strongly recommend reading the [Decoding ML](https://decodingml.substack.com/) articles on forget text-to-sql area to understand the concept comprehensively. -->
+
+
+## 💾 Dataset  
+We use a **publicly available dataset** containing **Airbnb listings in Stockholm**, sourced from [Inside Airbnb](http://insideairbnb.com/), which provides detailed metadata about rental properties.  
+
+- The dataset includes key attributes such as **listing descriptions, prices, locations, property types, availability, and ratings**.  
+- This structured data enables **multi-attribute semantic search**, allowing users to query Airbnb listings based on various factors like price range, neighborhood, and amenities.  
 
 ## 📥 Installation
 
@@ -46,24 +62,23 @@ A cutting-edge **semantic search system** for Airbnb listings, leveraging **[Sup
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/airbnb-semantic-search.git
+git clone https://github.com/AmirLayegh/airbnb-semantic-search.git
 cd airbnb-semantic-search
 ```
 
 2. Install dependencies using uv:
 ```bash
-# Install uv if you don't have it
-curl -LsSf https://astral.sh/uv/install.sh | sh
+# Create a virtual environment (if not created)
+uv venv
 
-# Install dependencies from pyproject.toml
-uv pip install -e .
+# Install dependencies from pyproject.toml in editable mode
+uv install -e .
+
+# OR (Preferred for installing all dependencies with version locking)
+uv sync
+
 ```
 
-3. Alternatively, use the Makefile:
-```bash
-# Setup environment, install dependencies, and verify installation
-make setup
-```
 
 3. Create a `.env` file in the root directory with your credentials:
 ```
@@ -83,38 +98,37 @@ python tools/create_qdrant_database.py
    
    Or using the Makefile:
 ```bash
-make create-db
+make create-qdrant-database
 ```
 
-2. Start the API server:
+2. Start the Superlinked server:
 ```bash
-superlinked serve
+python -m superlinked.server
 ```
    
    Or using the Makefile:
 ```bash
-make serve
+make start-superlinked-server
 ```
 
-3. Launch the Streamlit application:
+3. Load the data into Qdrant collection:
 ```bash
-cd tools
-streamlit run st_app.py
-```
-   
-   Or using the Makefile:
-```bash
-make ui
+make load-data
 ```
 
-4. Open your browser at `http://localhost:8501` to access the application.
+4. Run the Streamlit UI app:
+```bash
+make streamlit-run
+```
+
+5. Open your browser at `http://localhost:8501` to access the application.
 
 ## 🔍 Usage
 
 ### Basic Search
 
 Enter natural language queries in the search bar like:
-- "Apartments in downtown with a view"
+- "Apartments in old town with a view"
 - "Affordable homes under $100 per night"
 - "Top-rated places with pool and wifi"
 
@@ -133,43 +147,6 @@ Explore search result analytics including:
 - Room type breakdown
 - Summary statistics
 
-## 📁 Project Structure
-
-```
-├── superlinked_app/
-│   ├── __init__.py          # Package initialization
-│   ├── config.py            # Configuration settings
-│   ├── constants.py         # Constants definition
-│   ├── index.py             # Data schema definition
-│   ├── query.py             # Query configurations
-│   └── vdb.py               # Vector database setup
-├── tools/
-│   ├── create_qdrant_database.py  # Database initialization tool
-│   ├── st_app.py                  # Enhanced Streamlit UI
-│   └── streamlit_app.py           # Basic Streamlit UI
-├── .env                     # Environment variables (not tracked by git)
-├── Makefile                 # Automation for common development tasks
-├── pyproject.toml           # Project metadata and dependencies
-└── README.md                # Project documentation
-```
-
-## 🧩 How It Works
-
-1. **Data Indexing**:
-   - The system parses Airbnb listings data according to the schema defined in `index.py`
-   - Text fields (descriptions, amenities) are embedded using vector embeddings
-   - Numerical fields (price, ratings) are stored for filtering
-
-2. **Query Processing**:
-   - Natural language queries are processed by OpenAI
-   - The system extracts relevant search parameters (description text, price constraints, etc.)
-   - A structured query is built combining vector similarity and filter conditions
-
-3. **Result Retrieval**:
-   - The vector database performs efficient similarity search
-   - Results are filtered based on additional criteria
-   - Listings are ranked by relevance and returned to the user
-
 ## 🛠️ Customization
 
 ### Adding New Fields
@@ -187,13 +164,6 @@ The Streamlit interface can be customized by editing:
 - `tools/st_app.py` (enhanced UI)
 - `tools/streamlit_app.py` (basic UI)
 
-## 📈 Future Improvements
-
-- [ ] Add support for geographical search (map-based interface)
-- [ ] Implement user authentication and personalized recommendations
-- [ ] Add multi-language support
-- [ ] Create advanced analytics dashboards
-- [ ] Add image-based similarity search
 
 ## 📄 License
 

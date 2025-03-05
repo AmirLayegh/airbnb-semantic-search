@@ -13,7 +13,7 @@ assert ENV_FILE.exists(), f"Environment file not found: {ENV_FILE}"
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=str(ENV_FILE), env_file_encoding="utf-8")
     
-    DATA_PATH: str = "/Users/amlk/MLOps-training/listings.csv"
+    DATA_PATH: str = "data/listings.csv"
     USE_QDRANT_VECTOR_DB: bool = True
     QDRANT_CLUSTER_NAME: str = 'airbnb'
     QDRANT_COLLECTION_NAME: str = 'airbnb_semantic_search'
