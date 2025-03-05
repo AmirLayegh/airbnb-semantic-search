@@ -1,6 +1,6 @@
 # Airbnb Semantic Search
 
-A powerful semantic search system for Airbnb listings built with [Superlinked](https://www.superlinked.com/) and [Qdrant](https://qdrant.tech/) vector database.
+A cutting-edge **semantic search system** for Airbnb listings, leveraging **[Superlinked](https://www.superlinked.com/)** for multi-attribute vector indexing and **[Qdrant](https://qdrant.tech/)** for high-performance vector search. This system enables **natural language queries** to retrieve relevant listings by embedding different attributes (e.g., price, location, and descriptions) using specialized embedding models, ensuring highly accurate and context-aware search results.
 
 ![Airbnb Search Banner](/sources/airbnb-superlinked-dark.png)
 
