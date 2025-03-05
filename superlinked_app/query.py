@@ -51,8 +51,9 @@ base_query = (
     .filter(
         index.airbnb.room_type == sl.Param("filter_by_type", options=['Private room', 'Entire home/apt', 'Shared room', 'Hotel room']),
     )
+    .limit(sl.Param("limit"))
     #.select_all()
-    .limit(5)
+    #.limit(sl.Param("limit"))
 )
 
 filter_query = (

@@ -29,10 +29,9 @@ airbnb_loader_source: sl.DataLoaderSource = sl.DataLoaderSource(
 if setting.USE_QDRANT_VECTOR_DB:
     logger.info("Using Qdrant vector database")
     vector_database = sl.QdrantVectorDatabase(
-        # setting.QDRANT_CLUSTER_NAME,
-        # setting.QDRANT_COLLECTION_NAME,
         setting.QDRANT_CLUSTER_URL.get_secret_value(),
         setting.QDRANT_API_KEY.get_secret_value(),
+        collection_name='airbnb_semantic_search',
     )
     
 else:
