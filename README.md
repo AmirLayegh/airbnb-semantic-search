@@ -41,9 +41,6 @@ A cutting-edge **semantic search system** for Airbnb listings, leveraging **[Sup
 - **Streamlit**: Interactive web interface
 - **uv**: Fast Python package installer and resolver
 
-<!-- **Recommendation**: While you can follow the installation guide directly, we strongly recommend reading the [Decoding ML](https://decodingml.substack.com/) articles on forget text-to-sql area to understand the concept comprehensively. -->
-
-
 ## 💾 Dataset  
 We use a **publicly available dataset** containing **Airbnb listings in Stockholm**, sourced from [Inside Airbnb](http://insideairbnb.com/), which provides detailed metadata about rental properties.  
 
@@ -170,8 +167,4 @@ The Streamlit interface can be customized by editing:
 This project is licensed under the MIT License - see the LICENSE file for details.
 
 ## 🙏 Acknowledgements
-
-- [Superlinked](https://www.superlinked.com/) for the semantic search framework
-- [Qdrant](https://qdrant.tech/) for the vector database
-- [OpenAI](https://openai.com/) for natural language processing capabilities
-- [Streamlit](https://streamlit.io/) for the interactive web interface
+This project was **inspired by** the amazing work from **[DECODING ML](https://github.com/decodingml/tabular-semantic-search-tutorial)** on **tabular semantic search**. Their tutorial provided valuable insights into leveraging vector databases and multi-attribute indexing for structured data retrieval.  
