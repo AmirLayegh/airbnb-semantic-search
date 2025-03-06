@@ -14,7 +14,7 @@ logger.info("Loading environment variables from .env file: %s", ENV_FILE)
 class DataReader:
     def __init__(self) -> None:
         #self.path = os.getenv('DATA_PATH')
-        self.path = "/Users/amlk/MLOps-training/listings.csv"
+        self.path = "listings.csv"
     def read(self):
         data = pd.read_csv(self.path)
         return data
