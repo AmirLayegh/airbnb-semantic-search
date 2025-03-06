@@ -4,7 +4,6 @@ import pandas as pd
 import json
 import time
 from datetime import datetime
-# Removed plotly dependency
 import numpy as np
 
 # Configure page
